@@ -1,0 +1,1 @@
+CREATE TABLE last_commit(id INTEGER PRIMARY KEY AUTOINCREMENT, repo TEXT, branch TEXT, hash TEXT);
