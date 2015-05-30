@@ -10,6 +10,7 @@ import email.utils
 from email.mime.text import MIMEText
 
 gitlab_url = "https://gitlab.domain.com"
+gitlab_access_token = "ABCDEFG"
 
 
 class SendEmail(object):
@@ -38,7 +39,7 @@ class Commit(object):
     def __init__(self):
         self.db = "commits.db"
         self.con = sql.connect(self.db)
-        self.git = gitlab.Gitlab(gitlab_url, token="ABCDEFG", verify_ssl=False)
+        self.git = gitlab.Gitlab(gitlab_url, token=gitlab_access_token, verify_ssl=False)
         with self.con:
             self.cur = self.con.cursor()
         requests.packages.urllib3.disable_warnings()
