@@ -75,12 +75,12 @@ class Commit(object):
                     branch_name = branches["name"]
 
                     try:
-                        check_commit = self.sql_select(branch_name, project_name)
+                        commit_in_sql = self.sql_select(branch_name, project_name)
                     except TypeError:
                         self.sql_insert(project_name, branch_name, new_commit)
 
-                    if check_commit != new_commit:
-                        diff = self.git.compare_branches_tags_commits(project_id, check_commit, new_commit)
+                    if commit_in_sql != new_commit:
+                        diff = self.git.compare_branches_tags_commits(project_id, commit_in_sql, new_commit)
                         try:
                             author_name = diff["commit"]["author_name"]
                             author_email = diff["commit"]["author_email"]
@@ -90,7 +90,7 @@ class Commit(object):
                             pass
 
                         compare_url = "%s/%s/%s/compare/%s...%s" %\
-                                      (gitlab_url, group_name, project_name, check_commit, new_commit)
+                                      (gitlab_url, group_name, project_name, commit_in_sql, new_commit)
                         send_email = SendEmail()
                         msg = 'Commit Repo: %s\nBranch Name: %s\nUser: %s\nUser Mail: %s\nCommit Message: %sCommit Time: %s\n\nDiff URL: %s' %\
                               (project_name, branch_name, author_name, author_email, author_message, commit_date, compare_url)
