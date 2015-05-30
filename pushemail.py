@@ -15,14 +15,14 @@ gitlab_access_token = "ABCDEFG"
 
 class SendEmail(object):
     def __init__(self):
-        self.des = 'to@domain.com'
+        self.mail_to = 'to@domain.com'
         self.mail_from = 'from@domain.com'
         self.mail_server = 'mail.domain.com'
         self.mail_subject = 'Git New Commit'
 
     def main(self, msg):
         msg = MIMEText(msg)
-        msg['To'] = email.utils.formataddr(('Recipient', self.des))
+        msg['To'] = email.utils.formataddr(('Recipient', self.mail_to))
         msg['From'] = email.utils.formataddr(('New Git Commit', self.mail_from))
         msg['Subject'] = self.mail_subject
 
@@ -30,7 +30,7 @@ class SendEmail(object):
         server.set_debuglevel(False)
 
         try:
-            server.sendmail(self.mail_from, self.des, msg.as_string())
+            server.sendmail(self.mail_from, self.mail_to, msg.as_string())
         finally:
             server.quit()
 
