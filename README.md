@@ -12,7 +12,7 @@ Also if new repo created, script detect new repo and insert new repo to last_com
     Commit Repo: githlab-email-repo
     Branch Name: master
     User: gokhan
-    User Mail: gokhan@mankara.og
+    User Mail: gokhan@mankara.org
     Commit Message: First Test Email Commit
     Commit Time: 2015-05-30T13:58:42.000+03:00
     
