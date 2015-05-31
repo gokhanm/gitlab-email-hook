@@ -18,12 +18,12 @@ class SendEmail(object):
         self.mail_to = 'to@domain.com'
         self.mail_from = 'from@domain.com'
         self.mail_server = 'mail.domain.com'
-        self.mail_subject = 'Git New Commit'
+        self.mail_subject = 'New Commit'
 
     def main(self, msg):
         msg = MIMEText(msg)
         msg['To'] = email.utils.formataddr(('Recipient', self.mail_to))
-        msg['From'] = email.utils.formataddr(('New Git Commit', self.mail_from))
+        msg['From'] = email.utils.formataddr((self.mail_subject, self.mail_from))
         msg['Subject'] = self.mail_subject
 
         server = smtplib.SMTP(self.mail_server, 25)
