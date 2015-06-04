@@ -80,12 +80,12 @@ class Commit(object):
                         self.sql_insert(project_name, branch_name, new_commit)
 
                     if commit_in_sql != new_commit:
-                        diff = self.git.compare_branches_tags_commits(project_id, commit_in_sql, new_commit)
+                        get_commit_info = self.git.getrepositorycommit(project_id, new_commit)
                         try:
-                            author_name = diff["commit"]["author_name"]
-                            author_email = diff["commit"]["author_email"]
-                            author_message = diff["commit"]["message"]
-                            commit_date = diff["commit"]["created_at"]
+                            author_name = get_commit_info["author_name"]
+                            author_email = get_commit_info["author_email"]
+                            author_message = get_commit_info["title"]
+                            commit_date = get_commit_info["created_at"]
                         except TypeError:
                             pass
 
