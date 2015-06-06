@@ -1,6 +1,6 @@
 # GitLab Email Hook
 Storing last short sha1 commit in sql. After pushing new commit to remote server if 
-new short sha1 commit not equal with short sha1 commit in sql, script sending email 
+new short sha1 commit equal with short sha1 commit in sql, script sending email 
 following format and updating sql.
 
 Also if new repo created, script detect new repo and insert new repo to last_commit sql table
