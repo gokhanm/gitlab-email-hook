@@ -47,22 +47,33 @@ class Commit(object):
         if not os.path.isfile(self.db):
             os.system("sqlite3 commits.db < commits.sql")
 
-    def sql_insert(self, repo, branch, hash):
-        sql = "insert into last_commit ('repo', 'branch', 'hash') values ('%s', '%s', '%s')" % (repo, branch, hash)
+    def sql_insert(self, repo, branch, hash, group_name):
+        sql = "insert into last_commit ('repo', 'branch', 'hash', 'group_name') values ('%s', '%s', '%s', '%s')" %\
+              (repo, branch, hash, group_name)
+
         self.cur.execute(sql)
         self.con.commit()
 
-    def sql_select(self, branch, repo):
-        sql = "select hash from `last_commit` where branch='%s' and repo='%s'" % (branch, repo)
+    def sql_select(self, branch, repo, group_name):
+        sql = "select hash from `last_commit` where branch='%s' and repo='%s' and group_name='%s'" %\
+              (branch, repo, group_name)
+
         self.cur.execute(sql)
         return self.cur.fetchone()[0]
 
-    def sql_update(self, new_hash, branch, repo):
-        sql = "UPDATE last_commit SET hash='%s' WHERE branch='%s' and repo='%s'" % (new_hash, branch, repo)
+    def sql_update(self, new_hash, branch, repo, group_name):
+        sql = "UPDATE last_commit SET hash='%s' WHERE branch='%s' and repo='%s' and group_name='%s'" %\
+              (new_hash, branch, repo, group_name)
+
         self.cur.execute(sql)
         self.con.commit()
 
     def commits(self):
+        global author_email
+        global author_message
+        global author_name
+        global commit_date
+
         # git.getprojectsall => Returns a dictionary of all the projects for admins only
         # git.getprojects => Returns a dictionary of all the projects
 
@@ -75,9 +86,9 @@ class Commit(object):
                     branch_name = branches["name"]
 
                     try:
-                        commit_in_sql = self.sql_select(branch_name, project_name)
+                        commit_in_sql = self.sql_select(branch_name, project_name, group_name)
                     except TypeError:
-                        self.sql_insert(project_name, branch_name, new_commit)
+                        self.sql_insert(project_name, branch_name, new_commit, group_name)
 
                     if commit_in_sql != new_commit:
                         get_commit_info = self.git.getrepositorycommit(project_id, new_commit)
@@ -95,7 +106,7 @@ class Commit(object):
                         msg = 'Commit Repo: %s\nBranch Name: %s\nUser: %s\nUser Mail: %s\nCommit Message: %sCommit Time: %s\n\nDiff URL: %s' %\
                               (project_name, branch_name, author_name, author_email, author_message, commit_date, compare_url)
                         send_email.main(msg)
-                        self.sql_update(new_commit, branch_name, project_name)
+                        self.sql_update(new_commit, branch_name, project_name, group_name)
 
     def main(self):
         self.commits()
